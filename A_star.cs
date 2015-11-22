@@ -61,6 +61,10 @@ public class A_star
 	public List<node> A_star_find_path (node current, node goal, node[,] grid)
 	{
 		List<node> path = new List<node> ();
+		if (goal.walkable == false) {
+			Debug.Log ("you clicked on a non rechable area");
+			return path;
+		}
 		compute_h_costs (grid, goal); //pre compute h costs
 		//find all open neighbour nodes arround current node
 		node current_n = current;
@@ -98,6 +102,26 @@ public class A_star
 				closed_nodes.Add(last_entry);  //add that to closed path
 			}
 		}
+		if(current_n == goal){
+			Debug.Log("It worked you got it");
+		}
 		return path;
+	}
+
+	public node position_to_node(Vector3 posi,node[,] grid){
+		List<float> distances = new List<float>();
+
+		foreach (node n in grid) {
+			float dis = Vector3.Distance(n.position,posi);
+			distances.Add(dis);
+		}
+		distances.Sort ();
+		foreach (node n in grid) {
+			float dis = Vector3.Distance(n.position,posi);
+			if(dis == distances[0]){
+				return n;//nearest node
+			}
+		}
+		return grid [0, 0];
 	}
 }

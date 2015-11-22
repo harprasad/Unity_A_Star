@@ -23,7 +23,7 @@ public class Grid_script
 			foreach (GameObject obstas in obstacles) {
 				Renderer obstas_rendrr = (Renderer)obstas.GetComponent ("Renderer");
 				if (obstas_rendrr.bounds.Intersects (rendrr.bounds)) {
-					rendrr.material.color = Color.black;
+					//rendrr.material.color = Color.black;
 					cell.walkable = false;
 				}
 			}
