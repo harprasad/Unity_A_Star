@@ -36,7 +36,8 @@ public class A_star
 		}
 		fx_vals.Sort ();
 		foreach (node nod in neighbour_nodes) {
-			if (fx (current_node, nod) == fx_vals [0]) {
+			float fx_cost =fx (current_node, nod);
+			if(fx_cost == fx_vals [0]) {
 				return nod;
 			}
 		}
@@ -49,6 +50,7 @@ public class A_star
 		float max_distance = Vector3.Distance (grid [0, 0].position, grid [1, 1].position);
 		foreach (node n in open_nodes) {
 			float node_distance = Vector3.Distance (current.position, n.position);
+			if(node_distance == 0) continue;
 			if (node_distance <= max_distance) {
 				neighbours.Add (n);
 			}
@@ -66,8 +68,18 @@ public class A_star
 			path.Add (current_n);
 			List<node> neighbours = find_neighbour_nodes (current_n, grid);
 			if(neighbours.Count == 0){
-				Debug.Log("No route possible");
-				break;
+				Debug.Log("dead lock");
+				path.Remove(current_n); //remove it from path
+				open_nodes.Remove(current_n);
+				closed_nodes.Add(current_n);
+				current_n = path[path.Count-1];
+//				open_nodes.Add(current_n);
+				if (path.Count > 22 ) {
+					Debug.Log("No route possible");
+					break;
+				}
+//				break;
+				continue;
 			}
 			node next_node = chose_node (neighbours, current_n);
 			if(next_node == current_n)
@@ -77,10 +89,13 @@ public class A_star
 				break;
 			}
 			current_n = next_node;
+			open_nodes.Remove(current_n);
 			if(path.Contains(current_n)){
 				//path reversing 
-				open_nodes.Remove(path[path.Count]); //remove last node
-				closed_nodes.Add(path[path.Count]);  //add that to closed path
+				node last_entry = path[path.Count-1];
+				path.Remove(last_entry);
+				open_nodes.Remove(last_entry); //remove last node
+				closed_nodes.Add(last_entry);  //add that to closed path
 			}
 		}
 		return path;

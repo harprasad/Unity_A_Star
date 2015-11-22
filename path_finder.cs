@@ -13,10 +13,7 @@ public class path_finder : MonoBehaviour {
 		gs.create_grid (100f, 100f, (uint)grid_cell_prefab.transform.localScale.x, (uint)grid_cell_prefab.transform.localScale.z);
 		gs.plot_cells (start_point.position, (uint)grid_cell_prefab.transform.localScale.x, (uint)grid_cell_prefab.transform.localScale.z);
 		gs.draw_grid (grid_cell_prefab);
-		List<node> path= astr.A_star_find_path (gs.grid [0, 0], gs.grid [20, 20], gs.grid);
-		foreach (node n in path) {
-			GameObject.Instantiate(path_prefab,n.position,Quaternion.identity);
-		}
+		StartCoroutine(draw_path());
 	}
 	
 	// Update is called once per frame
@@ -31,5 +28,15 @@ public class path_finder : MonoBehaviour {
 		}
 		print ("found " + obs + " blocked grids out of "+ cells);
 	
+	}
+
+	IEnumerator draw_path() {
+
+	
+		List<node> path= astr.A_star_find_path (gs.grid [0, 0], gs.grid [32,32], gs.grid);
+		foreach (node n in path) {
+			GameObject.Instantiate(path_prefab,n.position,Quaternion.identity);
+			yield return new WaitForSeconds(1);
+		}
 	}
 }
