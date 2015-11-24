@@ -69,19 +69,20 @@ public class A_star
 		//find all open neighbour nodes arround current node
 		node current_n = current;
 		while (current_n != goal) {
-			path.Add (current_n);
+			if(!path.Contains(current_n))
+				path.Add (current_n);
 			List<node> neighbours = find_neighbour_nodes (current_n, grid);
 			if(neighbours.Count == 0){
 				Debug.Log("dead lock");
 				path.Remove(current_n); //remove it from path
 				open_nodes.Remove(current_n);
 				closed_nodes.Add(current_n);
-				current_n = path[path.Count-1];
+				current_n = path[path.Count-2];
 //				open_nodes.Add(current_n);
-				if (path.Count > 22 ) {
-					Debug.Log("No route possible");
-					break;
-				}
+//				if (path.Count > 22 ) {
+//					Debug.Log("No route possible");
+//					break;
+//				}
 //				break;
 				continue;
 			}
